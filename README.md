@@ -16,6 +16,7 @@ please make sure to setup .env
 `bash
     DATABASE_URL
     DIRECT_URL
+    YOUTUBE_API_KEY
     `
 
 1. Clone the repository:
