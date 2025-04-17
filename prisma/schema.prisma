@@ -1,0 +1,17 @@
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model scraped_videos {
+  id   String @id @default(uuid())
+  title String
+  url  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
