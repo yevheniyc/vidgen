@@ -1,0 +1,50 @@
+import { google } from "googleapis";
+
+// Define an interface for the video data we expect
+interface YouTubeVideo {
+  id: string;
+  title: string;
+  views: number | string; // View count can be large, string might be safer from API
+  likes: number | string; // Like count can also be large
+  thumbnailUrl?: string; // Optional: Add thumbnail URL
+  publishedAt: string;
+}
+
+export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
+  if (!process.env.YOUTUBE_API_KEY) {
+    throw new Error(
+      "YouTube API key is missing. Please set YOUTUBE_API_KEY environment variable."
+    );
+  }
+
+  try {
+    const youtube = google.youtube({
+      version: "v3",
+      auth: process.env.YOUTUBE_API_KEY,
+    });
+
+    const response = await youtube.videos.list({
+      part: ["snippet", "statistics", "id"], // Include id, snippet for title/thumbnail, statistics for counts
+      chart: "mostPopular",
+      regionCode: "US", // You can change this to a different region if needed
+      videoCategoryId: "10", // Category ID for Music
+      maxResults: 25, // Fetch top 25 popular music videos
+    });
+
+    const videos =
+      response.data.items?.map((item) => ({
+        id: item.id ?? "", // Use nullish coalescing for safety
+        title: item.snippet?.title ?? "No Title",
+        views: item.statistics?.viewCount ?? 0,
+        likes: item.statistics?.likeCount ?? 0,
+        thumbnailUrl: item.snippet?.thumbnails?.default?.url, // Get default thumbnail
+        publishedAt: item.snippet?.publishedAt ?? "",
+      })) || []; // Ensure we return an empty array if items is null/undefined
+
+    return videos;
+  } catch (error) {
+    console.error("Error fetching trending videos:", error);
+    // In a real app, you might want more sophisticated error handling
+    throw new Error("Failed to fetch trending music videos from YouTube.");
+  }
+}
