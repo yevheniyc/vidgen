@@ -8,6 +8,7 @@ interface YouTubeVideo {
   likes: number | string; // Like count can also be large
   thumbnailUrl: string | null; // Can be null if no thumbnail is available
   publishedAt: string;
+  videoUrl: string; // Add video URL
 }
 
 export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
@@ -28,7 +29,7 @@ export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
       chart: "mostPopular",
       regionCode: "US", // You can change this to a different region if needed
       videoCategoryId: "10", // Category ID for Music
-      maxResults: 25, // Fetch top 25 popular music videos
+      maxResults: 100, // Fetch top 25 popular music videos
     });
 
     const videos =
@@ -39,6 +40,7 @@ export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
         likes: item.statistics?.likeCount ?? 0,
         thumbnailUrl: item.snippet?.thumbnails?.default?.url ?? null, // Explicitly handle null case
         publishedAt: item.snippet?.publishedAt ?? "",
+        videoUrl: `https://www.youtube.com/watch?v=${item.id}`, // Add YouTube video URL
       })) || [];
 
     return videos;

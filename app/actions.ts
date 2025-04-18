@@ -11,6 +11,7 @@ export interface TrendingVideoData {
   likes: number | string;
   thumbnailUrl: string | null;
   publishedAt: string;
+  videoUrl: string;
 }
 
 export async function fetchTrendingMusicVideos(): Promise<{
