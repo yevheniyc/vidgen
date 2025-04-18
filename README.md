@@ -13,10 +13,11 @@ Before you begin, ensure you have the following installed:
 ## Getting Started
 
 please make sure to setup .env
-    ```bash
+`bash
     DATABASE_URL
     DIRECT_URL
-    ```
+    YOUTUBE_API_KEY
+    `
 
 1. Clone the repository:
 
@@ -32,6 +33,7 @@ please make sure to setup .env
    ```
 
 3. Set up Prisma:
+
    ```bash
    # Install Prisma CLI globally (if not already installed)
    npm install -g prisma
@@ -39,8 +41,6 @@ please make sure to setup .env
    # Generate Prisma Client
    npx prisma generate
    ```
-
-
 
    ```bash
    npm run dev
