@@ -6,7 +6,7 @@ interface YouTubeVideo {
   title: string;
   views: number | string; // View count can be large, string might be safer from API
   likes: number | string; // Like count can also be large
-  thumbnailUrl?: string; // Optional: Add thumbnail URL
+  thumbnailUrl: string | null; // Can be null if no thumbnail is available
   publishedAt: string;
 }
 
@@ -37,9 +37,9 @@ export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
         title: item.snippet?.title ?? "No Title",
         views: item.statistics?.viewCount ?? 0,
         likes: item.statistics?.likeCount ?? 0,
-        thumbnailUrl: item.snippet?.thumbnails?.default?.url, // Get default thumbnail
+        thumbnailUrl: item.snippet?.thumbnails?.default?.url ?? null, // Explicitly handle null case
         publishedAt: item.snippet?.publishedAt ?? "",
-      })) || []; // Ensure we return an empty array if items is null/undefined
+      })) || [];
 
     return videos;
   } catch (error) {

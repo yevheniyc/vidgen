@@ -84,9 +84,9 @@ export default async function Home() {
             {videos.map((video: TrendingVideoData) => (
               <TableRow key={video.id}>
                 <TableCell>
-                  {video.thumbnailUrl ? (
+                  {video.thumbnailUrl !== null ? (
                     <Image
-                      src={video.thumbnailUrl}
+                      src={video.thumbnailUrl as string}
                       alt={`Thumbnail for ${video.title}`}
                       width={120}
                       height={90}

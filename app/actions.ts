@@ -9,7 +9,7 @@ export interface TrendingVideoData {
   title: string;
   views: number | string;
   likes: number | string;
-  thumbnailUrl?: string;
+  thumbnailUrl: string | null;
   publishedAt: string;
 }
 
