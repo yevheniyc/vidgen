@@ -84,21 +84,37 @@ export default async function Home() {
             {videos.map((video: TrendingVideoData) => (
               <TableRow key={video.id}>
                 <TableCell>
-                  {video.thumbnailUrl !== null ? (
-                    <Image
-                      src={video.thumbnailUrl as string}
-                      alt={`Thumbnail for ${video.title}`}
-                      width={120}
-                      height={90}
-                      className="rounded"
-                    />
-                  ) : (
-                    <div className="w-[120px] h-[90px] bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
-                      No Thumbnail
-                    </div>
-                  )}
+                  <a
+                    href={video.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block hover:opacity-80 transition-opacity"
+                  >
+                    {video.thumbnailUrl !== null ? (
+                      <Image
+                        src={video.thumbnailUrl as string}
+                        alt={`Thumbnail for ${video.title}`}
+                        width={120}
+                        height={90}
+                        className="rounded"
+                      />
+                    ) : (
+                      <div className="w-[120px] h-[90px] bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                        No Thumbnail
+                      </div>
+                    )}
+                  </a>
                 </TableCell>
-                <TableCell className="font-medium">{video.title}</TableCell>
+                <TableCell className="font-medium">
+                  <a
+                    href={video.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-600 hover:underline transition-colors"
+                  >
+                    {video.title}
+                  </a>
+                </TableCell>
                 <TableCell>{formatNumber(video.views)}</TableCell>
                 <TableCell>{formatNumber(video.likes)}</TableCell>
                 <TableCell>{formatDate(video.publishedAt)}</TableCell>
