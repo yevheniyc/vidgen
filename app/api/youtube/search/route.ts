@@ -1,5 +1,38 @@
 import { NextResponse } from 'next/server';
 
+interface YouTubeSearchItem {
+  id: {
+    videoId: string;
+  };
+  snippet: {
+    title: string;
+    description: string;
+    thumbnails: {
+      default: {
+        url: string;
+      };
+    };
+    publishedAt: string;
+  };
+}
+
+interface YouTubeStatsItem {
+  id: string;
+  statistics: {
+    viewCount: string;
+    likeCount: string;
+    commentCount: string;
+  };
+}
+
+interface YouTubeSearchResponse {
+  items: YouTubeSearchItem[];
+}
+
+interface YouTubeStatsResponse {
+  items: YouTubeStatsItem[];
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
@@ -20,10 +53,10 @@ export async function GET(request: Request) {
       throw new Error('Failed to fetch YouTube results');
     }
 
-    const searchData = await searchResponse.json();
+    const searchData: YouTubeSearchResponse = await searchResponse.json();
     
     // Get video IDs for statistics
-    const videoIds = searchData.items.map((item: any) => item.id.videoId).join(',');
+    const videoIds = searchData.items.map((item) => item.id.videoId).join(',');
     
     // Fetch statistics for all videos in one request
     const statsResponse = await fetch(
@@ -34,11 +67,11 @@ export async function GET(request: Request) {
       throw new Error('Failed to fetch video statistics');
     }
 
-    const statsData = await statsResponse.json();
+    const statsData: YouTubeStatsResponse = await statsResponse.json();
     
     // Combine search results with statistics
-    const videosWithStats = searchData.items.map((item: any) => {
-      const stats = statsData.items.find((stat: any) => stat.id === item.id.videoId);
+    const videosWithStats = searchData.items.map((item) => {
+      const stats = statsData.items.find((stat) => stat.id === item.id.videoId);
       return {
         ...item,
         statistics: stats?.statistics
