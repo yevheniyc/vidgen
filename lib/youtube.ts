@@ -24,26 +24,37 @@ export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
       auth: process.env.YOUTUBE_API_KEY,
     });
 
-    const response = await youtube.videos.list({
-      part: ["snippet", "statistics", "id"], // Include id, snippet for title/thumbnail, statistics for counts
-      chart: "mostPopular",
-      regionCode: "US", // You can change this to a different region if needed
-      videoCategoryId: "10", // Category ID for Music
-      maxResults: 100, // Fetch top 25 popular music videos
-    });
+    let allVideos: YouTubeVideo[] = [];
+    let nextPageToken: string | undefined;
+    
+    do {
+      const response = await youtube.videos.list({
+        part: ["snippet", "statistics", "id"],
+        chart: "mostPopular",
+        regionCode: "US",
+        videoCategoryId: "10",
+        maxResults: 50,
+        pageToken: nextPageToken,
+      });
 
-    const videos =
-      response.data.items?.map((item) => ({
-        id: item.id ?? "", // Use nullish coalescing for safety
+      const videos = response.data.items?.map((item) => ({
+        id: item.id ?? "",
         title: item.snippet?.title ?? "No Title",
         views: item.statistics?.viewCount ?? 0,
         likes: item.statistics?.likeCount ?? 0,
-        thumbnailUrl: item.snippet?.thumbnails?.default?.url ?? null, // Explicitly handle null case
+        thumbnailUrl: item.snippet?.thumbnails?.maxres?.url ?? 
+                     item.snippet?.thumbnails?.standard?.url ?? 
+                     item.snippet?.thumbnails?.high?.url ?? 
+                     item.snippet?.thumbnails?.default?.url ?? null,
         publishedAt: item.snippet?.publishedAt ?? "",
-        videoUrl: `https://www.youtube.com/watch?v=${item.id}`, // Add YouTube video URL
+        videoUrl: `https://www.youtube.com/watch?v=${item.id}`,
       })) || [];
 
-    return videos;
+      allVideos = [...allVideos, ...videos];
+      nextPageToken = response.data.nextPageToken || undefined;
+    } while (nextPageToken && allVideos.length < 500); // Limit to 500 videos to avoid rate limits
+
+    return allVideos;
   } catch (error) {
     console.error("Error fetching trending videos:", error);
     // In a real app, you might want more sophisticated error handling

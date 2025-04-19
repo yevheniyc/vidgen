@@ -8,11 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchTrendingMusicVideos, TrendingVideoData } from "./actions";
+import { fetchTrendingMusicVideos, TrendingVideoData } from "@/utils/actions";
 import Image from "next/image";
-import Navbar from "@/components/navbar/Navbar";
 import { useEffect, useState } from "react";
 import { YouTubeSearchResult } from "@/components/navbar/SearchBar";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/navbar/Navbar";
 
 // Helper function to format date
 function formatDate(dateString: string): string {
@@ -57,6 +58,7 @@ export default function Home() {
   const [videos, setVideos] = useState<TrendingVideoData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetchTrendingMusicVideos()
@@ -190,7 +192,15 @@ export default function Home() {
                   <TableCell>
                     <button
                       className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-                      onClick={() => window.open(video.videoUrl, '_blank')}
+                      onClick={() => {
+                        const videoData = {
+                          id: video.id,
+                          title: video.title,
+                          thumbnailUrl: video.thumbnailUrl,
+                          videoUrl: video.videoUrl
+                        };
+                        router.push(`/generation?video=${encodeURIComponent(JSON.stringify(videoData))}`);
+                      }}
                     >
                       Generate
                     </button>
