@@ -1,80 +1,85 @@
-# VidGen
+# VidGen - Video Generation Platform
 
-A Next.js application for video generation and management.
+A modern web application built with Next.js for video generation and management.
 
-## Prerequisites
+## Features
 
-Before you begin, ensure you have the following installed:
+- **Modern UI/UX**: Built with Next.js, Tailwind CSS, and Radix UI components
+- **Authentication**: Integrated with Clerk for secure user authentication
+- **Database**: Uses Prisma with Supabase for data management
+- **Video Generation**: Integration with Google APIs for video processing
+- **Responsive Design**: Mobile-friendly interface
+- **Dark Mode**: Built-in theme support with next-themes
 
-- Node.js (v18 or later)
-- npm (v9 or later)
-- PostgreSQL (for database)
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS 4
+- **UI Components**: Radix UI, Lucide Icons
+- **Authentication**: Clerk
+- **Database**: Prisma, Supabase
+- **Form Handling**: React Hook Form with Zod validation
+- **State Management**: React Hooks
+- **Animation**: Embla Carousel, tw-animate-css
+
+## Project Structure
+
+```
+vidgen/
+├── app/                  # Next.js app directory
+│   ├── api/             # API routes
+│   ├── layout.tsx       # Root layout
+│   └── page.tsx         # Home page
+├── components/          # React components
+│   ├── navbar/         # Navigation components
+│   └── ui/             # Reusable UI components
+├── lib/                 # Utility functions and configurations
+├── prisma/             # Database schema and migrations
+├── public/             # Static assets
+└── utils/              # Helper functions
+```
 
 ## Getting Started
 
-please make sure to setup .env
-`bash
-    DATABASE_URL
-    DIRECT_URL
-    YOUTUBE_API_KEY
-    `
-
-1. Clone the repository:
-
-   ```bash
-   git clone <repository-url>
-   cd vidgen
-   ```
-
-2. Install dependencies
+1. Clone the repository
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-3. Set up Prisma:
+3. Set up environment variables:
+   Create a `.env.local` file with the following variables:
 
-   ```bash
-   # Install Prisma CLI globally (if not already installed)
-   npm install -g prisma
-
-   # Generate Prisma Client
-   npx prisma generate
    ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+   CLERK_SECRET_KEY=your_clerk_secret
+   DATABASE_URL=your_database_url
+   ```
+
+4. Run the development server:
 
    ```bash
    npm run dev
    ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000)
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Available Scripts
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the application for production
-- `npm run start` - Start the production server
-- `npm run lint` - Run ESLint to check for code issues
-- `npx prisma generate` - Generate Prisma Client
-- `npx prisma studio` - Open Prisma Studio to manage your database
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Project Structure
+## Contributing
 
-- `/app` - Next.js app directory containing pages and components
-- `/public` - Static assets
-- `/prisma` - Database schema and migrations
-- `/node_modules` - Project dependencies
-- Configuration files:
-  - `next.config.ts` - Next.js configuration
-  - `tsconfig.json` - TypeScript configuration
-  - `postcss.config.mjs` - PostCSS configuration
-  - `eslint.config.mjs` - ESLint configuration
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Tech Stack
+## License
 
-- Next.js 15.3.1
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- ESLint
-- Prisma (Database ORM)
-- PostgreSQL (Database)
+This project is licensed under the MIT License - see the LICENSE file for details.
