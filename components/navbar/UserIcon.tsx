@@ -23,7 +23,7 @@ function UserIcon() {
   }
   
   // Provide a fallback UI when no user or profile image is available
-  return <LuUser className='w-6 h-6 bg-primary rounded-full text-white' />;
+  return <LuUser className='w-6 h-6 bg-primary rounded-full' />;
 }
 
 export default UserIcon;
