@@ -24,17 +24,17 @@ function LinksDropdown() {
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-48 bg-background' align='start' sideOffset={10}>
+      <DropdownMenuContent className='w-48 bg-purple-700 border-purple-800' align='start' sideOffset={10}>
         <SignedOut>
           <DropdownMenuItem>
             <SignInButton mode='modal'>
-              <button className='w-full text-left'>Login</button>
+              <button className='w-full text-left cursor-pointer'>Login</button>
             </SignInButton>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <SignUpButton mode='modal'>
-              <button className='w-full text-left'>Register</button>
+              <button className='w-full text-left cursor-pointer'>Register</button>
             </SignUpButton>
           </DropdownMenuItem>
         </SignedOut>

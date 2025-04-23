@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { YouTubeSearchResult } from "@/components/navbar/SearchBar";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar/Navbar";
+import { useUser, SignInButton } from '@clerk/nextjs';
 
 // Helper function to format date
 function formatDate(dateString: string): string {
@@ -59,6 +60,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     fetchTrendingMusicVideos()
@@ -190,20 +192,28 @@ export default function Home() {
                   <TableCell>{formatNumber(video.likes)}</TableCell>
                   <TableCell>{formatDate(video.publishedAt)}</TableCell>
                   <TableCell>
-                    <button
-                      className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-                      onClick={() => {
-                        const videoData = {
-                          id: video.id,
-                          title: video.title,
-                          thumbnailUrl: video.thumbnailUrl,
-                          videoUrl: video.videoUrl
-                        };
-                        router.push(`/generation?video=${encodeURIComponent(JSON.stringify(videoData))}`);
-                      }}
-                    >
-                      Generate
-                    </button>
+                    {isSignedIn ? (
+                      <button
+                        className="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 transition-colors cursor-pointer"
+                        onClick={() => {
+                          const videoData = {
+                            id: video.id,
+                            title: video.title,
+                            thumbnailUrl: video.thumbnailUrl,
+                            videoUrl: video.videoUrl
+                          };
+                          router.push(`/generation?video=${encodeURIComponent(JSON.stringify(videoData))}`);
+                        }}
+                      >
+                        Generate
+                      </button>
+                    ) : (
+                      <SignInButton mode="modal">
+                        <button className="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 transition-colors cursor-pointer">
+                          Generate
+                        </button>
+                      </SignInButton>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
