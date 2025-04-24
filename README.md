@@ -83,6 +83,56 @@ vidgen/
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+## Theme Customization
+
+The application uses a modern color system with OKLCH color space for better color representation. You can customize the theme by modifying the following:
+
+1. Color Variables
+
+   - Edit `app/globals.css` to modify the color scheme
+   - Colors are defined in both light and dark mode variants
+   - Use OKLCH color space for better color representation
+
+2. Theme Components
+
+   - `app/theme-provider.tsx` - Manages theme state
+   - `components/navbar/ThemeSwitch.tsx` - Theme toggle component
+   - Customize theme colors in `components.json`
+
+3. Dark Mode
+   - System-wide dark mode support
+   - Automatic theme detection
+   - Smooth transitions between themes
+
+## Authentication Setup
+
+The application uses Clerk for authentication. Follow these steps to set up authentication:
+
+1. Create a Clerk Account
+
+   - Sign up at [clerk.com](https://clerk.com)
+   - Create a new application
+   - Get your API keys
+
+2. Configure Environment Variables
+   Add these to your `.env.local`:
+
+   ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key
+   CLERK_SECRET_KEY=your_secret_key
+   ```
+
+3. Authentication Components
+
+   - `components/navbar/UserIcon.tsx` - User profile display
+   - `components/navbar/SignOutLink.tsx` - Sign out functionality
+   - `components/navbar/LinksDropdown.tsx` - Authentication menu
+
+4. Protected Routes
+   - Use `useUser` hook to check authentication state
+   - Wrap protected components with `SignedIn` and `SignedOut` components
+   - Access user data through the `useUser` hook
+
 ## API Documentation
 
 The API documentation is available at `/api/docs` when running the development server. It provides detailed information about:
