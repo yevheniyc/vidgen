@@ -12,21 +12,21 @@ interface YouTubeVideo {
 }
 
 export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
-  if (!process.env.YOUTUBE_API_KEY) {
+  if (!process.env.NEXT_PUBLIC_YOUTUBE_API_KEY) {
     throw new Error(
-      "YouTube API key is missing. Please set YOUTUBE_API_KEY environment variable."
+      "YouTube API key is missing. Please set NEXT_PUBLIC_YOUTUBE_API_KEY environment variable."
     );
   }
 
   try {
     const youtube = google.youtube({
       version: "v3",
-      auth: process.env.YOUTUBE_API_KEY,
+      auth: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
     });
 
     let allVideos: YouTubeVideo[] = [];
     let nextPageToken: string | undefined;
-    
+
     do {
       const response = await youtube.videos.list({
         part: ["snippet", "statistics", "id"],
@@ -37,18 +37,21 @@ export async function getTrendingMusicVideos(): Promise<YouTubeVideo[]> {
         pageToken: nextPageToken,
       });
 
-      const videos = response.data.items?.map((item) => ({
-        id: item.id ?? "",
-        title: item.snippet?.title ?? "No Title",
-        views: item.statistics?.viewCount ?? 0,
-        likes: item.statistics?.likeCount ?? 0,
-        thumbnailUrl: item.snippet?.thumbnails?.maxres?.url ?? 
-                     item.snippet?.thumbnails?.standard?.url ?? 
-                     item.snippet?.thumbnails?.high?.url ?? 
-                     item.snippet?.thumbnails?.default?.url ?? null,
-        publishedAt: item.snippet?.publishedAt ?? "",
-        videoUrl: `https://www.youtube.com/watch?v=${item.id}`,
-      })) || [];
+      const videos =
+        response.data.items?.map((item) => ({
+          id: item.id ?? "",
+          title: item.snippet?.title ?? "No Title",
+          views: item.statistics?.viewCount ?? 0,
+          likes: item.statistics?.likeCount ?? 0,
+          thumbnailUrl:
+            item.snippet?.thumbnails?.maxres?.url ??
+            item.snippet?.thumbnails?.standard?.url ??
+            item.snippet?.thumbnails?.high?.url ??
+            item.snippet?.thumbnails?.default?.url ??
+            null,
+          publishedAt: item.snippet?.publishedAt ?? "",
+          videoUrl: `https://www.youtube.com/watch?v=${item.id}`,
+        })) || [];
 
       allVideos = [...allVideos, ...videos];
       nextPageToken = response.data.nextPageToken || undefined;
