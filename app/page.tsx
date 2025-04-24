@@ -30,6 +30,12 @@ function formatDate(dateString: string): string {
   }
 }
 
+// Helper function to truncate text
+function truncateText(text: string, limit: number): string {
+  if (text.length <= limit) return text;
+  return text.slice(0, limit) + '...';
+}
+
 // Helper function to format numbers
 function formatNumber(num: number | string): string {
   try {
@@ -147,9 +153,9 @@ export default function Home() {
               <TableRow>
                 <TableHead className="w-[100px]">Thumbnail</TableHead>
                 <TableHead>Title</TableHead>
-                <TableHead>Views</TableHead>
-                <TableHead>Likes</TableHead>
-                <TableHead>Published Date</TableHead>
+                <TableHead className="hidden sm:table-cell">Views</TableHead>
+                <TableHead className="hidden sm:table-cell">Likes</TableHead>
+                <TableHead className="hidden xl:table-cell">Published Date</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -184,13 +190,15 @@ export default function Home() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="hover:text-blue-600 hover:underline transition-colors"
+                      title={video.title}
                     >
-                      {video.title}
+                      <span className="hidden xl:inline">{video.title}</span>
+                      <span className="xl:hidden">{truncateText(video.title, 40)}</span>
                     </a>
                   </TableCell>
-                  <TableCell>{formatNumber(video.views)}</TableCell>
-                  <TableCell>{formatNumber(video.likes)}</TableCell>
-                  <TableCell>{formatDate(video.publishedAt)}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{formatNumber(video.views)}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{formatNumber(video.likes)}</TableCell>
+                  <TableCell className="hidden xl:table-cell">{formatDate(video.publishedAt)}</TableCell>
                   <TableCell>
                     {isSignedIn ? (
                       <button
