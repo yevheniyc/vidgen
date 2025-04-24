@@ -30,7 +30,7 @@ function GenerationContent() {
   )
 }
 
-function page() {
+function Page() {
   const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
@@ -52,4 +52,4 @@ function page() {
   return <GenerationContent />;
 }
 
-export default page
+export default Page
