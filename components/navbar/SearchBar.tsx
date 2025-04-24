@@ -1,7 +1,7 @@
-'use client';
-import { Input } from '../ui/input';
-import { useDebouncedCallback } from 'use-debounce';
-import { useState } from 'react';
+"use client";
+import { Input } from "../ui/input";
+import { useDebouncedCallback } from "use-debounce";
+import { useState } from "react";
 
 export interface YouTubeSearchResult {
   id: {
@@ -28,7 +28,7 @@ interface NavSearchProps {
 }
 
 function NavSearch({ onSearchResults }: NavSearchProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = useDebouncedCallback(async (term: string) => {
@@ -44,13 +44,13 @@ function NavSearch({ onSearchResults }: NavSearchProps) {
           term
         )}&type=video&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
       );
-      
+
       if (!response.ok) {
-        throw new Error('Failed to fetch YouTube results');
+        throw new Error("Failed to fetch YouTube results");
       }
 
       const data = await response.json();
-      
+
       // Fetch additional statistics for each video
       const videosWithStats = await Promise.all(
         (data.items || []).map(async (item: YouTubeSearchResult) => {
@@ -60,25 +60,25 @@ function NavSearch({ onSearchResults }: NavSearchProps) {
           const statsData = await statsResponse.json();
           return {
             ...item,
-            statistics: statsData.items[0]?.statistics
+            statistics: statsData.items[0]?.statistics,
           };
         })
       );
-      
+
       onSearchResults(videosWithStats);
     } catch (error) {
-      console.error('Error searching YouTube:', error);
+      console.error("Error searching YouTube:", error);
       onSearchResults([]);
     } finally {
       setIsLoading(false);
     }
-  }, 1000); 
+  }, 1000);
 
   return (
     <div className="relative w-full max-w-xl">
-      <Input 
-        type="search" 
-        placeholder="Search YouTube videos" 
+      <Input
+        type="search"
+        placeholder="Search YouTube videos"
         className="w-full dark:bg-[hsl(var(--muted))] dark:text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))] px-4 py-2"
         value={searchTerm}
         onChange={(e) => {
